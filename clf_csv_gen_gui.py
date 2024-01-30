@@ -2,6 +2,7 @@
 
 import sys
 import os
+import json
 
 '''
 git clone https://github.com/trucomanx/WorkingWithFiles.git
@@ -69,6 +70,13 @@ def on_generate_btn_clicked():
     format_list=[file_type];
     csv_file=os.path.join(csv_dir,csv_filename);
     res,Count=rnfunc.generate_csv_file_from_dir_structure(base_dir,format_list,csv_file);
+    
+    # create json object from dictionary
+    json_dat = json.dumps(Count)
+    f = open(csv_file+".json","w")
+    f.write(json_dat)
+    f.close();
+
     
     alert = QMessageBox()
     alert.setText('found '+str(len(res))+' files with the categories: '+str(Count))
