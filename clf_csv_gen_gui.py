@@ -7,8 +7,9 @@ import json
 '''
 git clone https://github.com/trucomanx/WorkingWithFiles.git
 cd WorkingWithFiles/src
-python setup.py sdist
+python3 setup.py sdist
 pip3 install dist/WorkingWithFiles-*.tar.gz
+rm -f -r WorkingWithFiles
 '''
 import WorkingWithFiles as rnfunc
 
