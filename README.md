@@ -1,6 +1,6 @@
 # dataset-csv-generator
 generate a csv file with the list of all files in the directory with the subdirectory name as category
-
+    
 
 # Required libraries
 
