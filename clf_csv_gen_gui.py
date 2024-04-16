@@ -90,8 +90,6 @@ def on_generate_btn_clicked():
     
     rb_first_down=rb_first.isChecked();
     
-    print('rb_first_down',rb_first_down)
-    
     format_list=[file_type];
     csv_file=os.path.join(csv_dir,csv_filename);
     res,Count=rnfunc.generate_csv_file_from_dir_structure(base_dir,format_list,csv_file,label_first=rb_first_down);
