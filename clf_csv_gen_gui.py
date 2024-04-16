@@ -9,6 +9,7 @@ git clone https://github.com/trucomanx/WorkingWithFiles.git
 cd WorkingWithFiles/src
 python3 setup.py sdist
 pip3 install dist/WorkingWithFiles-*.tar.gz
+cd ../../
 rm -f -r WorkingWithFiles
 '''
 import WorkingWithFiles as rnfunc

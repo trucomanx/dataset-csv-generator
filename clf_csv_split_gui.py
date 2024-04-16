@@ -9,8 +9,10 @@ import numpy as np
 '''
 git clone https://github.com/trucomanx/WorkingWithFiles.git
 cd WorkingWithFiles/src
-python setup.py sdist
+python3 setup.py sdist
 pip3 install dist/WorkingWithFiles-*.tar.gz
+cd ../../
+rm -f -r WorkingWithFiles
 '''
 import WorkingWithFiles as rnfunc
 
@@ -18,8 +20,10 @@ import WorkingWithFiles as rnfunc
 '''
 git clone https://github.com/trucomanx/PythonMlTools.git
 cd PythonMlTools/src
-python setup.py sdist
+python3 setup.py sdist
 pip3 install dist/PythonMlTools-*.tar.gz
+cd ../../
+rm -f -r PythonMlTools
 '''
 import PythonMlTools.DataSet.Split as pds
 
