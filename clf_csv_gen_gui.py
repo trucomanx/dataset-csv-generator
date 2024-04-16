@@ -73,7 +73,7 @@ def on_generate_btn_clicked():
     res,Count=rnfunc.generate_csv_file_from_dir_structure(base_dir,format_list,csv_file);
     
     # create json object from dictionary
-    json_dat = json.dumps(Count)
+    json_dat = json.dumps(Count, indent = 4)
     f = open(csv_file+".json","w")
     f.write(json_dat)
     f.close();
