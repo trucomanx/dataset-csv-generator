@@ -94,7 +94,7 @@ def on_generate_btn_clicked():
     
     format_list=[file_type];
     csv_file=os.path.join(csv_dir,csv_filename);
-    res,Count=rnfunc.generate_csv_file_from_dir_structure(base_dir,format_list,csv_file);
+    res,Count=rnfunc.generate_csv_file_from_dir_structure(base_dir,format_list,csv_file,label_first=rb_first_down);
     
     # create json object from dictionary
     json_dat = json.dumps(Count, indent = 4)
