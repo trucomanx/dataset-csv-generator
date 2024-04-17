@@ -111,7 +111,7 @@ def on_generate_btn_clicked():
                                                                     format_list,
                                                                     csv_file,
                                                                     input_has_header= False,
-                                                                    output_header_list = None,
+                                                                    output_header_list = 'default',
                                                                     label_first=rb_first_down,
                                                                     processing_func=None);
         
