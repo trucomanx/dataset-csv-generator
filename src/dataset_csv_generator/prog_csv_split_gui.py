@@ -5,27 +5,34 @@ import os
 import json
 from pathlib import Path
 import numpy as np
+from sklearn.model_selection import train_test_split
+
 
 '''
-git clone https://github.com/trucomanx/WorkingWithFiles.git
-cd WorkingWithFiles/src
-python3 setup.py sdist
-pip3 install dist/WorkingWithFiles-*.tar.gz
-cd ../../
-rm -f -r WorkingWithFiles
+pip install WorkingWithFiles
 '''
 import WorkingWithFiles as rnfunc
 
+def train_test_split_stratify_index(y, test_size=0.38, random_state=42):
+    y = np.asarray(y)
 
-'''
-git clone https://github.com/trucomanx/PythonMlTools.git
-cd PythonMlTools/src
-python3 setup.py sdist
-pip3 install dist/PythonMlTools-*.tar.gz
-cd ../../
-rm -f -r PythonMlTools
-'''
-import PythonMlTools.DataSet.Split as pds
+    if y.ndim != 1:
+        raise ValueError("y must be a 1-dimensional array of labels")
+
+    idx = np.arange(len(y))
+
+    idx_train, idx_test, y_train, y_test = train_test_split(
+        idx,
+        y,
+        test_size=test_size,
+        random_state=random_state,
+        stratify=y
+    )
+
+    return idx_train, idx_test, y_train, y_test
+
+
+
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -132,7 +139,7 @@ def on_generate_btn_clicked():
     y=np.array([mydict[val] for val in y_np]);
     
     
-    y_train_id, y_test_id, y_train, y_test = pds.train_test_split_stratify_index(y,
+    y_train_id, y_test_id, y_train, y_test = train_test_split_stratify_index(y,
                                                             test_size=test_factor/100.0, 
                                                             random_state=random_state);
     

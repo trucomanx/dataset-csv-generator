@@ -2,3 +2,5 @@
 /.goutputstream-ARQ9H2
 /.goutputstream-BLA2L2
 /.goutputstream-7KB3L2
+/src/dataset_csv_generator/__pycache__/
+/src/dataset_csv_generator/modules/__pycache__/
