@@ -1,6 +1,6 @@
-# {PROGRAM_NAME}
+# dataset_csv_generator
 
-{SUMMARY}
+Generates CSV files from a classification dataset
 
 ## Upload to PYPI
 

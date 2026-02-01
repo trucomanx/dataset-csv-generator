@@ -1,30 +1,32 @@
-# {PROGRAM_NAME}
+# dataset_csv_generator
 
-{SUMMARY}
+Generates CSV files from a classification dataset
 
-![logo](https://raw.githubusercontent.com/trucomanx/{REPOSITORY_NAME}/main/screenshot.png)
+![logo](https://raw.githubusercontent.com/trucomanx/DatasetCsvGenerator/main/screenshot.png)
 
 ## 1. Installing
 
-To install the package from [PyPI](https://pypi.org/project/{MODULE_NAME}/), follow the instructions below:
+To install the package from [PyPI](https://pypi.org/project/dataset_csv_generator/), follow the instructions below:
 
 
 ```bash
-pip install --upgrade {MODULE_NAME}
+pip install --upgrade dataset_csv_generator
 ```
 
-Execute `which {PROGRAM_NAME}` to see where it was installed, probably in `/home/USERNAME/.local/bin/{PROGRAM_NAME}`.
+Execute `pip show dataset_csv_generator` to see where it was installed, probably in `/home/USERNAME/.local/lib/python3.10/site-packages`.
 
 ### Using
 
 To start, use the command below:
 
 ```bash
-{PROGRAM_NAME}
+csv-generator
+csv-generator-gui
+csv-split-gui
 ```
 ## 2. More information
 
-If you want more information go to [doc](https://github.com/trucomanx/{REPOSITORY_NAME}/blob/main/doc) directory.
+If you want more information go to [doc](https://github.com/trucomanx/DatasetCsvGenerator/blob/main/doc) directory.
 
 ## 3. Buy me a coffee
 

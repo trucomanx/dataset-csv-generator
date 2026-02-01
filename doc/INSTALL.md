@@ -1,41 +1,45 @@
-# {PROGRAM_NAME}
+# dataset_csv_generator
 
-{SUMMARY}
+Generates CSV files from a classification dataset
 
 
 ## Install from PYPI
 
-The homepage in pipy is https://pypi.org/project/{MODULE_NAME}/
+The homepage in pipy is https://pypi.org/project/dataset_csv_generator/
 
 ```bash
-pip install --upgrade {MODULE_NAME}
+pip install --upgrade dataset_csv_generator
 ```
 
 Using:
 
 ```bash
-{PROGRAM_NAME}
+csv-generator
+csv-generator-gui
+csv-split-gui
 ```
 
 ## Install from source
-Installing `{PROGRAM_NAME}` program
+Installing `dataset_csv_generator` program
 
 ```bash
-git clone https://github.com/trucomanx/{REPOSITORY_NAME}.git
-cd {REPOSITORY_NAME}
+git clone https://github.com/trucomanx/DatasetCsvGenerator.git
+cd DatasetCsvGenerator
 pip install -r requirements.txt
 cd src
 python -m build
-pip install dist/{MODULE_NAME}-*.tar.gz
+pip install dist/dataset_csv_generator-*.tar.gz
 ```
 Using:
 
 ```bash
-{PROGRAM_NAME}
+csv-generator
+csv-generator-gui
+csv-split-gui
 ```
 
 ## Uninstall
 
 ```bash
-pip uninstall {MODULE_NAME}
+pip uninstall dataset_csv_generator
 ```

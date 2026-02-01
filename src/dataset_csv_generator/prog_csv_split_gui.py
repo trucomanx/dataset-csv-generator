@@ -54,6 +54,9 @@ DEFAULT_CONTENT={   "toolbar_configure": "Configure",
                     "window_percentage_label": "Test percentage %:",
                     "window_percentage_spin": 38.19,
                     "window_percentage_spin_tooltip": "Set the size percentage of the test dataset.",
+                    "window_category_column_label": "Category column name:",
+                    "window_category_column_lineedit": "label",
+                    "window_category_column_lineedit_tooltip": "The column name of the column containing categorical data used to split the dataset in a stratified way. If left blank, the code assumes the last column is the categorical column. If the specified column name does not exist, the program returns an error.",
                     "window_output": "<b>Output:</b>",
                     "window_output_dir_button": "CSV file directory:",
                     "window_output_dir_lineedit": "./",
@@ -76,6 +79,13 @@ configure.verify_default_config(CONFIG_PATH,default_content=DEFAULT_CONTENT)
 
 CONFIG=configure.load_config(CONFIG_PATH)
 
+def count_labels(df_train, label_col="label"):
+    if label_col not in df_train.columns:
+        raise ValueError(f"Coluna '{label_col}' não encontrada no DataFrame")
+
+    counts = df_train[label_col].value_counts().sort_values(ascending=False).to_dict()
+    return counts
+    
 def train_test_split_stratify_index(y, test_size=0.38, random_state=42):
     y = np.asarray(y)
 
@@ -142,41 +152,47 @@ class MainWindow(QMainWindow):
         self.test_factor_spin.setToolTip(CONFIG["window_percentage_spin_tooltip"])
         layout.addWidget(self.test_factor_spin, 2, 1)
 
+
+        layout.addWidget(QLabel(CONFIG["window_category_column_label"]), 3, 0)
+        self.input_category_column_linedit = QLineEdit(CONFIG["window_category_column_lineedit"])
+        self.input_category_column_linedit.setToolTip(CONFIG["window_category_column_lineedit_tooltip"])
+        layout.addWidget(self.input_category_column_linedit, 3, 1)
+
         # Adicionar o espaçador
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        layout.addWidget(spacer, 3, 0)
+        layout.addWidget(spacer, 4, 0)
 
         # ---------- Output ----------
         label_output = QLabel(CONFIG["window_output"])
         label_output.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        layout.addWidget(label_output, 4, 0)
+        layout.addWidget(label_output, 5, 0)
 
         self.csv_out_dir_btn = QPushButton(CONFIG["window_output_dir_button"])
         self.csv_out_dir_btn.setToolTip(CONFIG["window_output_dir_tooltip"])
-        layout.addWidget(self.csv_out_dir_btn, 5, 0)
+        layout.addWidget(self.csv_out_dir_btn, 6, 0)
         self.csv_out_dir_linedit = QLineEdit(CONFIG["window_output_dir_lineedit"])
         self.csv_out_dir_linedit.setToolTip(CONFIG["window_output_dir_tooltip"])
-        layout.addWidget(self.csv_out_dir_linedit, 5, 1)
+        layout.addWidget(self.csv_out_dir_linedit, 6, 1)
 
-        layout.addWidget(QLabel(CONFIG["window_output_train_label"]), 6, 0)
+        layout.addWidget(QLabel(CONFIG["window_output_train_label"]), 7, 0)
         self.csv_train_filename_linedit = QLineEdit(CONFIG["window_output_train_lineedit"])
         self.csv_train_filename_linedit.setToolTip(CONFIG["window_output_train_lineedit_tooltip"])
-        layout.addWidget(self.csv_train_filename_linedit, 6, 1)
+        layout.addWidget(self.csv_train_filename_linedit, 7, 1)
 
-        layout.addWidget(QLabel(CONFIG["window_output_test_label"]), 7, 0)
+        layout.addWidget(QLabel(CONFIG["window_output_test_label"]), 8, 0)
         self.csv_test_filename_linedit = QLineEdit(CONFIG["window_output_test_lineedit"])
         self.csv_test_filename_linedit.setToolTip(CONFIG["window_output_test_lineedit_tooltip"])
-        layout.addWidget(self.csv_test_filename_linedit, 7, 1)
+        layout.addWidget(self.csv_test_filename_linedit, 8, 1)
 
         # Adicionar o espaçador
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        layout.addWidget(spacer, 8, 0)
+        layout.addWidget(spacer, 9, 0)
 
         self.generate_btn = QPushButton(CONFIG["window_generate_button"])
         self.generate_btn.setToolTip(CONFIG["window_generate_button_tooltip"])
-        layout.addWidget(self.generate_btn, 9, 1)
+        layout.addWidget(self.generate_btn, 10, 1)
 
         # ---------- Signals ----------
 
@@ -286,11 +302,18 @@ class MainWindow(QMainWindow):
 
         df = pd.read_csv(input_csv)
 
-        column_name = "label"
-        if column_name in df.columns:
+        column_name = self.input_category_column_linedit.text().strip()
+        
+        if   len(column_name) == 0:
+            column_name = df.columns[-1]
+            y_np = df.iloc[:, -1].to_numpy()
+        elif column_name in df.columns:
             y_np = df[column_name].to_numpy()
         else:
-            y_np = df.iloc[:, -1].to_numpy()
+            alert = QMessageBox(self)
+            alert.setText("Error choosing the category column with name: "+column_name)
+            alert.exec()
+            return
 
         d_set = list(set(y_np))
         d_lbl = list(range(len(d_set)))
@@ -309,6 +332,15 @@ class MainWindow(QMainWindow):
 
         df_train.to_csv(csv_train_file, index=False)
         df_test.to_csv(csv_test_file, index=False)
+        
+        df_train_count = count_labels(df_train, label_col=column_name)
+        df_test_count = count_labels(df_test, label_col=column_name)
+        
+        with open(csv_train_file + ".json", "w") as f:
+            json.dump(df_train_count, f, indent=4)
+
+        with open(csv_test_file + ".json", "w") as f:
+            json.dump(df_test_count, f, indent=4)
 
         alert = QMessageBox(self)
         alert.setText("Work end")
@@ -318,6 +350,26 @@ class MainWindow(QMainWindow):
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     
+    create_desktop_directory()    
+    create_desktop_menu()
+    create_desktop_file(os.path.join("~",".local","share","applications"), 
+                        program_name=about.__program_csv_split_gui__)
+    
+    for n in range(len(sys.argv)):
+        if sys.argv[n] == "--autostart":
+            create_desktop_directory(overwrite = True)
+            create_desktop_menu(overwrite = True)
+            create_desktop_file(os.path.join("~",".config","autostart"), 
+                                overwrite=True, 
+                                program_name=about.__program_csv_split_gui__)
+            return
+        if sys.argv[n] == "--applications":
+            create_desktop_directory(overwrite = True)
+            create_desktop_menu(overwrite = True)
+            create_desktop_file(os.path.join("~",".local","share","applications"), 
+                                overwrite=True, 
+                                program_name=about.__program_csv_split_gui__)
+            return
     
     app = QApplication(sys.argv)
     app.setApplicationName(about.__package__) 
