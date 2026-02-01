@@ -58,9 +58,9 @@ dependencies = [
 "Source" = "{__url_source__}"
 
 [project.scripts]
-"{__program_csv_gen__}"       = "{__package__}.prog_csv_gen:main"
-"{__program_csv_gen_gui__}"   = "{__package__}.prog_csv_gen_gui:main"
-"{__program_csv_split_gui__}" = "{__package__}.prog_csv_split_gui:main"
+"{__program_csv_gen__}"     = "{__package__}.prog_csv_gen:main"
+"{__program_csv_gen_gui__}" = "{__package__}.prog_csv_gen_gui:main"
+"{__program_csv_split_gui__}"     = "{__package__}.prog_csv_split_gui:main"
 
 [tool.setuptools]
 packages = ["{__package__}", "{__package__}.modules"]
