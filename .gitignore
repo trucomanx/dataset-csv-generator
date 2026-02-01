@@ -4,3 +4,5 @@
 /.goutputstream-7KB3L2
 /src/dataset_csv_generator/__pycache__/
 /src/dataset_csv_generator/modules/__pycache__/
+/src/dataset_csv_generator.egg-info/
+/src/dist/
