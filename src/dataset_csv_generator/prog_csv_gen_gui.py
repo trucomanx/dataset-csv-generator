@@ -73,7 +73,7 @@ DEFAULT_CONTENT={   "toolbar_configure": "Configure",
                     "window_generate_tooltip": "Generate the <b>*.csv</b> and <b>*.csv.json</b> files.",
                     "window_generate_result_message": "Found {count} files with the categories: {categories}",
                     "window_select_directory": "Select Directory",
-                    "window_width": 1500,
+                    "window_width": 500,
                     "window_height": 450
                 }
 
