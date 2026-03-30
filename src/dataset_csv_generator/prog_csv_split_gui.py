@@ -2,13 +2,9 @@
 
 import sys
 import os
-import json
 import signal
 import subprocess
 from pathlib import Path
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split
 
 import WorkingWithFiles as rnfunc
 
@@ -32,7 +28,8 @@ from PyQt5.QtCore import Qt, QUrl
 
 import dataset_csv_generator.about as about
 import dataset_csv_generator.modules.configure as configure 
-from   dataset_csv_generator.modules.wabout  import show_about_window
+from   dataset_csv_generator.modules.split  import generate_train_test_csv
+from   dataset_csv_generator.modules.wabout import show_about_window
 from   dataset_csv_generator.desktop import create_desktop_file, create_desktop_directory, create_desktop_menu
 
 
@@ -80,30 +77,6 @@ configure.verify_default_config(CONFIG_PATH,default_content=DEFAULT_CONTENT)
 
 CONFIG=configure.load_config(CONFIG_PATH)
 
-def count_labels(df_train, label_col="label"):
-    if label_col not in df_train.columns:
-        raise ValueError(f"Coluna '{label_col}' não encontrada no DataFrame")
-
-    counts = df_train[label_col].value_counts().sort_values(ascending=False).to_dict()
-    return counts
-    
-def train_test_split_stratify_index(y, test_size=0.38, random_state=42):
-    y = np.asarray(y)
-
-    if y.ndim != 1:
-        raise ValueError("y must be a 1-dimensional array of labels")
-
-    idx = np.arange(len(y))
-
-    idx_train, idx_test, y_train, y_test = train_test_split(
-        idx,
-        y,
-        test_size=test_size,
-        random_state=random_state,
-        stratify=y
-    )
-
-    return idx_train, idx_test, y_train, y_test
 
 
 class MainWindow(QMainWindow):
@@ -288,63 +261,30 @@ class MainWindow(QMainWindow):
             self.csv_out_dir_linedit.setText(filepath)
 
     def on_generate_btn_clicked(self):
+        try:
+            csv_out_dir        = self.csv_out_dir_linedit.text()
+            csv_train_filename = self.csv_train_filename_linedit.text()
+            csv_test_filename  = self.csv_test_filename_linedit.text()
 
-        csv_out_dir = self.csv_out_dir_linedit.text()
-        csv_train_filename = self.csv_train_filename_linedit.text()
-        csv_test_filename = self.csv_test_filename_linedit.text()
+            input_csv   = self.input_csv_linedit.text()
+            test_factor = self.test_factor_spin.value()
+            column_name = self.input_category_column_linedit.text()
 
-        input_csv = self.input_csv_linedit.text()
-        test_factor = self.test_factor_spin.value()
-        random_state = 42
+            csv_train_file = os.path.join(csv_out_dir, csv_train_filename)
+            csv_test_file  = os.path.join(csv_out_dir, csv_test_filename)
 
-        csv_train_file = os.path.join(csv_out_dir, csv_train_filename)
-        csv_test_file = os.path.join(csv_out_dir, csv_test_filename)
+            generate_train_test_csv(
+                input_csv=input_csv,
+                csv_train_file=csv_train_file,
+                csv_test_file=csv_test_file,
+                test_factor=test_factor,
+                column_name=column_name
+            )
 
-        df = pd.read_csv(input_csv)
+            QMessageBox.information(self, "Success", "Work end")
 
-        column_name = self.input_category_column_linedit.text().strip()
-        
-        if   len(column_name) == 0:
-            column_name = df.columns[-1]
-            y_np = df.iloc[:, -1].to_numpy()
-        elif column_name in df.columns:
-            y_np = df[column_name].to_numpy()
-        else:
-            alert = QMessageBox(self)
-            alert.setText("Error choosing the category column with name: "+column_name)
-            alert.exec()
-            return
-
-        d_set = list(set(y_np))
-        d_lbl = list(range(len(d_set)))
-        mydict = dict(zip(d_set, d_lbl))
-
-        y = np.array([mydict[val] for val in y_np])
-
-        y_train_id, y_test_id, _, _ = train_test_split_stratify_index(
-            y,
-            test_size=test_factor / 100.0,
-            random_state=random_state
-        )
-
-        df_train = df.iloc[np.uint32(y_train_id).tolist(), :]
-        df_test = df.iloc[np.uint32(y_test_id).tolist(), :]
-
-        df_train.to_csv(csv_train_file, index=False)
-        df_test.to_csv(csv_test_file, index=False)
-        
-        df_train_count = count_labels(df_train, label_col=column_name)
-        df_test_count = count_labels(df_test, label_col=column_name)
-        
-        with open(csv_train_file + ".json", "w") as f:
-            json.dump(df_train_count, f, indent=4)
-
-        with open(csv_test_file + ".json", "w") as f:
-            json.dump(df_test_count, f, indent=4)
-
-        alert = QMessageBox(self)
-        alert.setText("Work end")
-        alert.exec()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", str(e))
 
 
 def main():
