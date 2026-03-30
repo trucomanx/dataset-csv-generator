@@ -22,6 +22,7 @@ To start, use the command below:
 ```bash
 csv-generator
 csv-generator-gui
+csv-split
 csv-split-gui
 ```
 ## 2. More information
