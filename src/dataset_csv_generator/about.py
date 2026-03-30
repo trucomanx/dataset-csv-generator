@@ -1,6 +1,6 @@
 # about.py
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __package__ = "dataset_csv_generator"
 __program_csv_gen__ = "csv-generator"
 __program_csv_gen_gui__   = "csv-generator-gui"
