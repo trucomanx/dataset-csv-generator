@@ -7,6 +7,7 @@ import signal
 import subprocess
 from pathlib import Path
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
 import WorkingWithFiles as rnfunc
@@ -287,7 +288,6 @@ class MainWindow(QMainWindow):
             self.csv_out_dir_linedit.setText(filepath)
 
     def on_generate_btn_clicked(self):
-        import pandas as pd
 
         csv_out_dir = self.csv_out_dir_linedit.text()
         csv_train_filename = self.csv_train_filename_linedit.text()
