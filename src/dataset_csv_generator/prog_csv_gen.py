@@ -52,8 +52,8 @@ def main():
 
     parser.add_argument(
         "--output-csv-file",
-        default="test_labels.csv",
-        help="Output CSV file name (default: test_labels.csv)"
+        default="dataset.csv",
+        help="Output CSV file name (default: dataset.csv)"
     )
 
     parser.add_argument(
@@ -128,7 +128,7 @@ def main():
     print("  label_first :", label_first)
     print()
 
-    rnfunc.generate_csv_file_from_dir_structure(
+    res, Count = rnfunc.generate_csv_file_from_dir_structure(
         args.input_base_dir,
         list(format_set),
         args.output_csv_file,
@@ -136,6 +136,9 @@ def main():
         label_first=label_first
     )
 
+    # Save JSON summary
+    with open(args.output_csv_file + ".json", "w") as f:
+        json.dump(Count, f, indent=4)
 
 if __name__ == "__main__":
     main()
