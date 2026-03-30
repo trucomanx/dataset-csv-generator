@@ -1,9 +1,10 @@
 # about.py
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __package__ = "dataset_csv_generator"
 __program_csv_gen__ = "csv-generator"
 __program_csv_gen_gui__   = "csv-generator-gui"
+__program_csv_split__ = "csv-split"
 __program_csv_split_gui__ = "csv-split-gui"
 __author__ = "Fernando Pujaico Rivera" 
 __email__  = "fernando.pujaico.rivera@gmail.com"

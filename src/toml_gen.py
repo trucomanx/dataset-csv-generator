@@ -10,6 +10,7 @@ from dataset_csv_generator.about import (
     __package__,
     __program_csv_gen__,
     __program_csv_gen_gui__,
+    __program_csv_split__,
     __program_csv_split_gui__,
     __author__,
     __email__,
@@ -47,6 +48,7 @@ keywords = ["csv", "dataset"]
 dependencies = [
     "PyQt5",
     "numpy",
+    "pandas",
     "scikit-learn",
     "WorkingWithFiles"
 ]
@@ -60,6 +62,7 @@ dependencies = [
 [project.scripts]
 "{__program_csv_gen__}"     = "{__package__}.prog_csv_gen:main"
 "{__program_csv_gen_gui__}" = "{__package__}.prog_csv_gen_gui:main"
+"{__program_csv_split__}"     = "{__package__}.prog_csv_split:main"
 "{__program_csv_split_gui__}"     = "{__package__}.prog_csv_split_gui:main"
 
 [tool.setuptools]
