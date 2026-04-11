@@ -22,7 +22,7 @@ def normalize_formats(format_list):
     normalized = set()
 
     for fmt in format_list:
-        fmt = fmt.lower().strip()
+        fmt = fmt.strip()
         if not fmt.startswith("."):
             fmt = "." + fmt
         normalized.add(fmt)
@@ -68,6 +68,7 @@ def main():
 
     parser.add_argument(
         "--input-format",
+        type=str,
         action="append",
         help=(
             "Image file extensions to include (can be used multiple times).\n"
